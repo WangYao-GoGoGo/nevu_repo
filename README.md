@@ -18,11 +18,13 @@ This repository provides a public-release version of the dataset for research us
 
 ## Release Note
 
-This repository contains the publicly shareable portion of the dataset.
+This repository contains the publicly shareable portion of NEVU for research use and review-time inspection.
+
+A subset of held-out evaluation items is not included in this anonymous public release. These items are reserved for an ongoing blind evaluation setting, and are withheld to prevent benchmark leakage and preserve the integrity of protected evaluation data.
 
 - Number of excluded held-out GUIDs: 350
 
-Some held-out evaluation data are excluded from this release. A more complete version is tentatively planned for release in late 2026.
+The manuscript reports statistics over the complete internal NEVU benchmark. This anonymous repository contains the currently shareable public subset. After the blind evaluation period concludes, we will reassess the release status of the withheld items. If they are no longer needed for protected evaluation and no licensing or privacy constraints apply, they will be added to the final de-anonymized release. If continued blind benchmarking is needed, they will remain protected and an access or evaluation protocol will be documented separately.
 
 ## Files
 
