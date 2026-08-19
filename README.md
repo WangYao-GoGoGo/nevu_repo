@@ -13,7 +13,7 @@ size_categories:
 
 NEVU is introduced in the following paper:
 
-**Event-Centric Human Value Understanding in News-Domain Texts: An Actor-Conditioned, Multi-Granularity Benchmark**
+**Event-Centric Human Value Understanding in News-Domain Texts: An Actor-Conditioned Benchmark across Multi-Scope Event Contexts**
 
 # NEVU Public Temporary Release
 
