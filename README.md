@@ -2,73 +2,148 @@
 language:
 - en
 tags:
-- human-values
-- news
-- benchmark
+- human
+- value
 pretty_name: NEVU-v1
 size_categories:
 - 10K<n<100K
 ---
 
-# NEVU Public Release
+## Paper
 
-NEVU is a dataset for event-centric human value understanding in news-domain texts.
+NEVU is introduced in the following paper:
 
-This repository provides a public-release version of the dataset for research use. Some held-out evaluation items are not included in this release.
+**Event-Centric Human Value Understanding in News-Domain Texts: An Actor-Conditioned, Multi-Granularity Benchmark**
 
-## Release Note
+# NEVU Public Temporary Release
 
-This repository contains the publicly shareable portion of NEVU for research use and review-time inspection.
+This is a temporary public release of the NEVU dataset for human value understanding in news-domain texts.
 
-A subset of held-out evaluation items is not included in this anonymous public release. These items are reserved for an ongoing blind evaluation setting, and are withheld to prevent benchmark leakage and preserve the integrity of protected evaluation data.
+## Important Note
 
-- Number of excluded held-out GUIDs: 350
+A portion of the full dataset is currently reserved for an ongoing protected blind evaluation and is therefore excluded from this release to avoid evaluation leakage.
 
-The manuscript reports statistics over the complete internal NEVU benchmark. This anonymous repository contains the currently shareable public subset. After the blind evaluation period concludes, we will reassess the release status of the withheld items. If they are no longer needed for protected evaluation and no licensing or privacy constraints apply, they will be added to the final de-anonymized release. If continued blind benchmarking is needed, they will remain protected and an access or evaluation protocol will be documented separately.
+- Protected GUIDs: 350
+- Complete protected materials are planned to be released after the blind evaluation period ends in **January 2027**.
+
+All released files in this repository have been filtered at the GUID level to remove protected instances where applicable.
 
 ## Files
 
-### Original release files
+The current release is organized into the following directories:
 
-Main files:
-- `event_base.json`
-- `human_value_labels_2ids.json`
-- `human_value_labels.json`
+```text
+event_base/
+    event_base.json
+    event_base_reformatted
 
-Example files:
-- `event_base_examples.json`
-- `human_value_labels_2ids_examples.json`
-- `human_value_labels_examples.json`
+majority-accepted_subset/
+    majority-accepted_subset_without_blind_data.json
 
-### Reformatted release files
+sub/
+    train_human_value_labels.json
+    train_human_value_labels_reformatted.json
+    train_human_value_labels_2ids.json
+    train_human_value_labels_2ids_reformatted.json
 
-To make the dataset easier to parse and use in downstream modeling, this release also provides reformatted versions of the three main files:
+    dev_human_value_labels.json
+    dev_human_value_labels_reformatted.json
+    dev_human_value_labels_2ids.json
+    dev_human_value_labels_2ids_reformatted.json
 
-- `event_base_reformatted.json`
-- `human_value_labels_2ids_reformatted.json`
-- `human_value_labels_reformatted.json`
+    test_human_value_labels.json
+    test_human_value_labels_reformatted.json
+    test_human_value_labels_2ids.json
+    test_human_value_labels_2ids_reformatted.json
 
-These reformatted files preserve the same annotation content as the original release as much as possible, while reorganizing the structure into more normalized and model-friendly formats.
+total/
+    train_human_value_labels.json
+    train_human_value_labels_reformatted.json
+    train_human_value_labels_2ids.json
+    train_human_value_labels_2ids_reformatted.json
 
-In all reformatted files, unit types are consistently represented in lowercase as:
-- `article`
-- `subevent`
-- `bce`
-- `sce`
+    dev_human_value_labels.json
+    dev_human_value_labels_reformatted.json
+    dev_human_value_labels_2ids.json
+    dev_human_value_labels_2ids_reformatted.json
 
-where:
-- `bce` corresponds to the original `behavior_chains`
-- `sce` corresponds to the original `story_narratives`
+    test_human_value_labels.json
+    test_human_value_labels_reformatted.json
+    test_human_value_labels_2ids.json
+    test_human_value_labels_2ids_reformatted.json
 
-Users who prefer the original release structure can continue using the original files. Users who want flatter and more standardized formats may use the reformatted files.
+hv_framework/
+    ...
+```
 
-## File Overview
+The previous top-level main files and example files have been removed. The underlying data formats and field definitions remain unchanged; only the release organization and file names have been updated.
 
-### 1. `event_base.json`
+### `event_base/`
 
-This file contains the event-structured base data for each news article. Each record corresponds to one article and includes the article text, title, time information, actor information, sentence list, and event-centric semantic structures.
+The event-base data are kept as one unified collection rather than being split into train/dev/test files.
 
-Main fields:
+Train/dev/test membership is defined through the human-value annotation files under `total/` and `sub/`. All files are aligned through the shared `guid` field, so the corresponding event record can be retrieved from `event_base/` using the `guid` in an annotation record.
+
+### `total/`
+
+The `total/` directory contains the currently shareable human-value annotations corresponding to the `Total` subsets reported in the paper.
+
+The annotations are separated into the official:
+- train partition
+- dev partition
+- test partition
+
+All protected GUIDs and their corresponding annotations have been removed from the released files.
+
+### `sub/`
+
+The `sub/` directory contains the currently shareable human-value annotations corresponding to the fixed sampled `Sub` subsets reported in the paper.
+
+Before blind filtering, these sampled subsets contain:
+- 20,000 annotated unit--actor pairs from train
+- 2,500 annotated unit--actor pairs from dev
+- 5,000 annotated unit--actor pairs from test
+
+The current public files exclude protected GUIDs. Therefore, the released `sub/` files are filtered versions of the complete sampled subsets used in the reported experiments.
+
+### `majority-accepted_subset/`
+
+The file:
+
+- `majority-accepted_subset_without_blind_data.json`
+
+contains the currently shareable majority-accepted reference labels derived from the multi-group candidate-acceptance assessment reported in the paper.
+
+The complete majority-accepted reference subset contains 400 evaluated unit--actor pairs covering 187 unique GUIDs. Four GUIDs overlap with the protected blind-evaluation set and are removed from the current public file.
+
+The complete majority-accepted reference subset will be released after the blind evaluation period ends in January 2027.
+
+### `hv_framework/`
+
+The `hv_framework/` directory is unchanged from the previous release.
+
+## File Descriptions
+
+The field definitions below apply across the corresponding train/dev/test files in both `total/` and `sub/`.
+
+For example:
+
+- `total/train_human_value_labels_2ids.json`
+- `total/dev_human_value_labels_2ids.json`
+- `total/test_human_value_labels_2ids.json`
+- `sub/train_human_value_labels_2ids.json`
+- `sub/dev_human_value_labels_2ids.json`
+- `sub/test_human_value_labels_2ids.json`
+
+all follow the same schema described for `human_value_labels_2ids.json` below.
+
+The same principle applies to the human-readable and reformatted versions.
+
+### 1. `event_base/event_base.json`
+
+This file contains the event-structured base data for each news article. Each record corresponds to one article and includes the article text, title, time, actor information, sentence list, and event-centric semantic structures.
+
+Main fields include:
 - `guid`: unique article identifier
 - `title`: article title
 - `content`: raw article text
@@ -80,9 +155,11 @@ Main fields:
 - `story_narratives`: higher-level narrative groupings over subevents
 - `news_type_l1`: coarse news genre label
 
-This file provides the structural foundation of the dataset and represents each article as a multi-level event-centric semantic structure.
+This file is the structural foundation of the dataset and is used to represent each article as a multi-level event-centric semantic unit.
 
-### 1b. `event_base_reformatted.json`
+Unlike the human-value annotation files, `event_base.json` is not divided into train/dev/test files. Partition membership is determined from the human-value annotation files, and corresponding event records can be retrieved using `guid`.
+
+### 1b. `event_base/event_base_reformatted`
 
 This file is a reformatted version of `event_base.json` with more standardized field organization.
 
@@ -105,11 +182,11 @@ In this reformatted version:
 
 This file is recommended for users who want a cleaner and more uniform event structure for parsing, modeling, or cross-level processing.
 
-### 2. `human_value_labels_2ids.json`
+### 2. `*_human_value_labels_2ids.json`
 
-This file contains the gold human value labels in a compact ID-based format. Each record corresponds to one annotated `(unit, actor)` instance.
+These files contain the released human value labels in a compact ID-based format. Each record corresponds to one annotated `(unit, actor)` instance.
 
-Main fields:
+Main fields include:
 - `guid`: article identifier
 - `unit_level`: semantic level of the annotation (`article`, `subevent`, `bce`, or `sce`)
 - `unit_id`: ID of the target unit within the article
@@ -117,13 +194,21 @@ Main fields:
 - `aligned`: list of aligned human value IDs
 - `contradictory`: list of contradictory human value IDs
 
-Because one article may contain multiple annotated units and multiple actors, this file is expanded: a single `guid` may appear in multiple rows.
+Because one article may contain multiple annotated units and multiple actors, these files are expanded: a single `guid` may appear in many rows.
 
-This file is suitable for benchmark training and evaluation because it provides the final gold labels in a compact machine-readable format.
+These files are suitable for benchmark training and evaluation, since they provide the released reference labels in a compact machine-readable format.
 
-### 2b. `human_value_labels_2ids_reformatted.json`
+The same schema is used for:
+- `total/train_human_value_labels_2ids.json`
+- `total/dev_human_value_labels_2ids.json`
+- `total/test_human_value_labels_2ids.json`
+- `sub/train_human_value_labels_2ids.json`
+- `sub/dev_human_value_labels_2ids.json`
+- `sub/test_human_value_labels_2ids.json`
 
-This file is a reformatted version of `human_value_labels_2ids.json`.
+### 2b. `*_human_value_labels_2ids_reformatted.json`
+
+These files are reformatted versions of the corresponding `*_human_value_labels_2ids.json` files.
 
 Compared with the original version:
 - unit types are normalized to `article`, `subevent`, `bce`, and `sce`
@@ -133,7 +218,7 @@ Compared with the original version:
   - `l1_label`
   - `l2_label`
 
-Main fields:
+Main fields include:
 - `guid`: article identifier
 - `unit_level`: semantic level of the annotation (`article`, `subevent`, `bce`, or `sce`)
 - `unit_id`: ID of the target unit within the article
@@ -145,13 +230,15 @@ Main fields:
   - `aligned`: list of aligned Level-2 value IDs
   - `contradictory`: list of contradictory Level-2 value IDs
 
-This file is recommended for users who want a more explicit hierarchical label structure while preserving the compact machine-readable format.
+These files are recommended for users who want a more explicit hierarchical label structure while preserving the compact machine-readable format.
 
-### 3. `human_value_labels.json`
+The same schema is used for the train/dev/test files under both `total/` and `sub/`.
 
-This file contains the human value annotations in a richer and more interpretable format. Each record corresponds to one article and groups value annotations by semantic level.
+### 3. `*_human_value_labels.json`
 
-Main sections:
+These files contain the human value annotations in a richer, more interpretable format. Each record corresponds to one article and groups value annotations by semantic level.
+
+Main sections include:
 - `article_human_values`
 - `subevents_human_values`
 - `behavior_chains_human_values`
@@ -161,21 +248,29 @@ Within each section, annotations are organized by actor and direction:
 - `aligned_with_human_values`
 - `contradictory_to_human_values`
 
-For each value label, this public release retains:
+For each value label, the public release retains:
 - `confidence`
 - `explanation`
 
-Some internal annotation fields are omitted from this release.
+Fields such as `model`, `qa_results`, `human_voting_count`, and `human_voting_num` are not included in the public release.
 
-This file is useful for interpretation, qualitative analysis, and understanding why a particular human value label was assigned.
+These files are useful for interpretation, qualitative analysis, and understanding why a particular human value label was assigned.
 
-### 3b. `human_value_labels_reformatted.json`
+The same schema is used for:
+- `total/train_human_value_labels.json`
+- `total/dev_human_value_labels.json`
+- `total/test_human_value_labels.json`
+- `sub/train_human_value_labels.json`
+- `sub/dev_human_value_labels.json`
+- `sub/test_human_value_labels.json`
 
-This file is a reformatted version of `human_value_labels.json` in a flatter and more instance-oriented format.
+### 3b. `*_human_value_labels_reformatted.json`
+
+These files are reformatted versions of the corresponding `*_human_value_labels.json` files in a flatter and more instance-oriented format.
 
 Each record corresponds to one `(guid, unit_level, unit_id, actor)` instance and groups all associated human values under that instance.
 
-Main fields:
+Main fields include:
 - `guid`: article identifier
 - `unit_level`: semantic level of the annotation (`article`, `subevent`, `bce`, or `sce`)
 - `unit_id`: ID of the target unit
@@ -195,67 +290,80 @@ For reformatted unit identifiers:
 - for `sce`, `unit_id` is the `story_narrative_id`
 - for `bce`, `unit_id` is the list of IDs in `behavior_ids_chains`
 
-This file is useful for easier programmatic loading, actor-centered inspection, and modeling pipelines that prefer flatter structures.
+These files are useful for easier programmatic loading, actor-centered inspection, and modeling pipelines that prefer flatter structures.
+
+The same schema is used for the train/dev/test files under both `total/` and `sub/`.
 
 ## Relationship Between the Main Files
 
-The files are aligned through the `guid` field.
+All files are aligned through the `guid` field.
 
-### Original files
-- `event_base.json` provides the article structure, event hierarchy, and actor definitions.
-- `human_value_labels_2ids.json` provides compact gold labels for `(unit, actor)` instances.
-- `human_value_labels.json` provides more detailed and human-readable value annotation content for the same articles.
+### Event structure
+- `event_base/event_base.json` provides the article structure, event hierarchy, and actor definitions.
+- `event_base/event_base_reformatted` provides the corresponding normalized event representation.
 
-### Reformatted files
-- `event_base_reformatted.json` provides a normalized event structure using `subevents`, `bces`, and `sces`.
-- `human_value_labels_2ids_reformatted.json` provides compact gold labels with normalized unit types and both Level-1 and Level-2 label groupings.
-- `human_value_labels_reformatted.json` provides flatter and more human-readable instance-level value annotations.
+### Total human-value annotations
+Files under `total/` provide the currently shareable annotations from the complete NEVU train/dev/test partitions after protected-GUID filtering.
 
-In practice:
-- use the **original files** if you want the original public release structure
-- use the **reformatted files** if you want easier parsing, flatter loading, and more standardized field naming
+### Sampled human-value annotations
+Files under `sub/` provide the currently shareable portions of the fixed sampled subsets used for the main HVR experiments.
 
-## Example Files
+### Majority-accepted reference labels
+- `majority-accepted_subset/majority-accepted_subset_without_blind_data.json` provides the currently shareable portion of the majority-accepted reference subset.
 
-To make the dataset easier to preview, this repository also provides three small example files. These files contain aligned examples with matching `guid`s across the three original formats.
+In other words:
+- use `event_base/event_base.json` or `event_base/event_base_reformatted` to understand the article and event structure,
+- use `*_human_value_labels_2ids.json` or `*_human_value_labels_2ids_reformatted.json` for benchmark-style supervised learning and evaluation,
+- use `*_human_value_labels.json` or `*_human_value_labels_reformatted.json` for explanation-oriented inspection and qualitative analysis,
+- use the annotation-file `guid` to retrieve the corresponding record from the unified event-base file.
 
-### 1. `event_base_examples.json`
-
-This file contains sample article records from `event_base.json`. It is intended to help users quickly inspect the event-centric structure of the dataset, including actors, subevents, behavior chains, and story narratives.
-
-### 2. `human_value_labels_2ids_examples.json`
-
-This file contains the corresponding gold label examples from `human_value_labels_2ids.json` for the same sampled `guid`s. Since this file is expanded by `(unit, actor)`, it may contain more rows than the number of sampled articles.
-
-### 3. `human_value_labels_examples.json`
-
-This file contains the corresponding sample records from `human_value_labels.json`, showing the same articles together with their human-readable value annotations and explanations.
-
-These example files are intended for quick inspection and visualization. For research use, please use the main release files.
-
-## Contents of This Release
-
-This release is derived from the internal dataset after excluding a held-out portion.
-
-Additional preprocessing for this public release:
-- In `event_base.json`, some internal metadata fields were removed.
-- In `human_value_labels.json`, selected explanatory fields are retained for each value entry.
-- Reformatted files are additionally provided to support easier parsing and more standardized downstream use.
-
-## Statistics
-
-### Original files
-- `event_base.json`: 2515 records
-- `human_value_labels_2ids.json`: 65950 records
-- `human_value_labels.json`: 2515 records
-
-### Reformatted files
-- `event_base_reformatted.json`: 2515 records
-- `human_value_labels_2ids_reformatted.json`: 65950 records
-- `human_value_labels_reformatted.json`: flattened instance-level records organized by `(guid, unit_level, unit_id, actor)`
-
-## Notes
+## Original and Reformatted Files
 
 The reformatted files are provided for convenience and do not define a different dataset split or annotation standard. They reorganize the same released content into more normalized structures.
 
-If exact backward compatibility with earlier parsing scripts is important, please use the original files. If easier loading and more uniform field naming are preferred, please use the reformatted files.
+In all reformatted files, unit types are consistently represented in lowercase as:
+- `article`
+- `subevent`
+- `bce`
+- `sce`
+
+where:
+- `bce` corresponds to the original `behavior_chains`
+- `sce` corresponds to the original `story_narratives`
+
+Users who prefer the original structure can use the non-reformatted files. Users who want flatter and more standardized formats may use the reformatted files.
+
+## Contents of the Current Release
+
+The current release is constructed from the NEVU data used in the paper after removing all records associated with the 350 protected GUIDs.
+
+The event-base records are distributed in one unified file, while the human-value annotations are organized according to the train/dev/test partitions under `total/` and `sub/`.
+
+Additional preprocessing for the public release remains consistent with the previous release:
+- In `event_base.json`, some internal metadata fields are removed.
+- In the human-readable human-value annotation files, only the public annotation fields such as `confidence` and `explanation` are retained.
+- Reformatted files are additionally provided for easier parsing and more standardized downstream use.
+
+## Protected Blind-Evaluation Data
+
+The current release excludes 350 protected GUIDs and their corresponding annotations.
+
+Protected instances are removed by `guid` from:
+- the released `event_base/` data,
+- the train/dev/test files under `total/`,
+- the train/dev/test files under `sub/`,
+- the released majority-accepted reference subset.
+
+Because some sampled experimental subsets overlap with these protected GUIDs, the current public `sub/` files are not the complete sampled data used for the reported experiments.
+
+The complete protected annotations and associated materials will be released after the blind evaluation period ends in **January 2027**.
+
+## Notes
+
+The `total/` and `sub/` directory names follow the subset terminology used in the paper.
+
+The event-base data are not independently divided into train/dev/test because they serve as the shared structural source. The train/dev/test human-value annotation files determine partition membership, and their `guid` values can be used to retrieve the corresponding event-base records.
+
+The reformatted files preserve the same released annotation content as their corresponding original-format files while reorganizing it for easier use.
+
+If exact backward compatibility with earlier parsing scripts is important, use the original-format files. If easier loading and more uniform field naming are preferred, use the reformatted files.
